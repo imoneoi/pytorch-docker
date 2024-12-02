@@ -24,11 +24,12 @@ RUN wget -q --show-progress --progress=bar:force:noscroll -O cuda_installer.run 
     && rm cuda_installer.run
 
 # Install PyTorch, torchvision, torchaudio, and other requirements
-COPY requirements.txt /tmp/
+COPY requirements /tmp/
 RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url $PYTORCH_INDEX_URL \
     && pip3 install --no-cache-dir packaging ninja \
-    && pip3 install --no-cache-dir -r /tmp/requirements.txt \
-    && rm /tmp/requirements.txt
+    && pip3 install --no-cache-dir --no-build-isolation -r /tmp/requirements/torch_extensions.txt \
+    && pip3 install --no-cache-dir -r /tmp/requirements/packages.txt \
+    && rm -rf /tmp/requirements
 
 # Set the default command to bash
 ENTRYPOINT [ "/bin/bash" ]

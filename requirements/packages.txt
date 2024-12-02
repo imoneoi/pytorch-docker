@@ -1,6 +1,3 @@
-torch
-flash-attn
-bf16-fused-adam
 einops
 tqdm
 coolname
