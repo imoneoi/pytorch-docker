@@ -5,7 +5,6 @@ einops
 tqdm
 coolname
 pydantic
-argdantic
 wandb
 numba
 omegaconf
