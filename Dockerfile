@@ -5,16 +5,13 @@ ARG CUDA_MD5=afc99bab1d8c6579395d851d948ca3c1
 
 ARG PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cu124
 
-ARG MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-py311_24.9.2-0-Linux-x86_64.sh
-ARG MINICONDA_SHA256=62ef806265659c47e37e22e8f9adce29e75c4ea0497e619c280f54c823887c4f
-ARG MINICONDA_DIR=/opt/miniconda
-
 # Install necessary packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     wget \
     git \
     libxml2 \
+    build-essential \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
@@ -27,7 +24,7 @@ RUN wget -q --show-progress --progress=bar:force:noscroll -O cuda_installer.run 
 # Install PyTorch, torchvision, torchaudio, and other requirements
 COPY requirements /tmp/requirements/
 RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url $PYTORCH_INDEX_URL \
-    && pip3 install --no-cache-dir packaging ninja wheel \
+    && pip3 install --no-cache-dir packaging ninja wheel setuptools setuptools-scm \
     && pip3 install --no-cache-dir --no-build-isolation -r /tmp/requirements/torch_extensions.txt \
     && pip3 install --no-cache-dir -r /tmp/requirements/packages.txt \
     && rm -rf /tmp/requirements
