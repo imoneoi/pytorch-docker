@@ -1,0 +1,16 @@
+torch
+flash-attn
+bf16-fused-adam
+einops
+tqdm
+coolname
+pydantic
+argdantic
+wandb
+numba
+omegaconf
+hydra-core
+
+transformers
+datasets
+tokenizers
