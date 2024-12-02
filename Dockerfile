@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM python:3.11-bookworm
 
 ARG CUDA_URL=https://developer.download.nvidia.com/compute/cuda/12.4.1/local_installers/cuda_12.4.1_550.54.15_linux.run
 ARG CUDA_MD5=afc99bab1d8c6579395d851d948ca3c1
@@ -11,6 +11,7 @@ ARG MINICONDA_DIR=/opt/miniconda
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     wget \
+    libxml2 \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
@@ -20,25 +21,10 @@ RUN wget -q --show-progress --progress=bar:force:noscroll -O cuda_installer.run 
     && sh cuda_installer.run --silent --toolkit --override \
     && rm cuda_installer.run
 
-# Download and install Miniconda
-RUN wget -q --show-progress --progress=bar:force:noscroll -O miniconda.sh $MINICONDA_URL \
-    && echo "$MINICONDA_SHA256 miniconda.sh" | sha256sum -c - \
-    && sh miniconda.sh -b -p $MINICONDA_DIR \
-    && rm miniconda.sh
-
-# Create a Miniconda environment and install packages
-RUN $MINICONDA_DIR/bin/conda create -y -n torch python=3.11 \
-    && echo "source $MINICONDA_DIR/bin/activate torch" >> ~/.bashrc
-
-# Activate the environment
-SHELL ["$MINICONDA_DIR/bin/conda", "run", "-n", "torch", "/bin/bash", "-c"]
-
-# Install PyTorch, torchvision, and torchaudio
-RUN pip install torch torchvision torchaudio packaging ninja
-
-# Add and install other required packages from a requirements.txt file
+# Install PyTorch, torchvision, torchaudio, and other requirements
 COPY requirements.txt /tmp/
-RUN pip install -r /tmp/requirements.txt \
+RUN pip install --no-cache-dir torch torchvision torchaudio packaging ninja \
+    && pip install --no-cache-dir -r /tmp/requirements.txt \
     && rm /tmp/requirements.txt
 
 # Set the default command to bash
