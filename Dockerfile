@@ -13,6 +13,7 @@ ARG MINICONDA_DIR=/opt/miniconda
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     wget \
+    git \
     libxml2 \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
