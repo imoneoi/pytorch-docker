@@ -30,10 +30,11 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.tag_name }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
 
+      - uses: actions/checkout@v4
+
       - name: Push README to Docker Hub
         uses: peter-evans/dockerhub-description@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
-          readme-filepath: ./README.md
