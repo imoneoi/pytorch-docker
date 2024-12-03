@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     wget \
     git \
+    openssh-client \
+    tmux \
     libxml2 \
     build-essential \
     ca-certificates \
