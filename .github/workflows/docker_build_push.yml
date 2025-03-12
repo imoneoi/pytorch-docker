@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    timeout-minutes: 120
+
     steps:
       # FIXME(one): This step is hacky and may break over time
       # Free up to 80GB space for building the image by removing unnecessary softwares and swap
